@@ -13,31 +13,19 @@ const CloudLocation = () => {
         zoom: 13, // 设置缩放级别
       });
       setMap(mapInstance);
-
-      // 引入自动提示搜索功能
-      const autoOptions = {
-        input: "locationSearch" // 搜索框的 input 元素 id
-      };
-      const autoComplete = new AMap.Autocomplete(autoOptions);
-      autoComplete.on('select', (event) => {
-        const { location } = event.poi; // 获取选中的地点的经纬度
-        if (location) {
-          setLongitude(location.lng);
-          setLatitude(location.lat);
-          mapInstance.setCenter([location.lng, location.lat]); // 更新地图中心
-        }
-      });
     };
 
+    // 判断高德地图的SDK是否已经加载
     if (window.AMap) {
       loadMap();
     } else {
+      // 动态加载高德地图 SDK
       const script = document.createElement('script');
-      script.src = "https://webapi.amap.com/maps?v=2.0&key=4a6434ff122931e7a54dc7d1c04dfd7c&plugin=AMap.Autocomplete";
+      script.src = "https://webapi.amap.com/maps?v=2.0&key=4a6434ff122931e7a54dc7d1c04dfd7c";
       script.onload = loadMap;
       document.body.appendChild(script);
     }
-  }, [longitude, latitude]);
+  }, [longitude, latitude]); // 当经纬度改变时，重新渲染地图
 
   const updateMapCenter = () => {
     if (map) {
@@ -49,17 +37,6 @@ const CloudLocation = () => {
     <div>
       <h3 className="text-lg font-medium mb-4">云定位</h3>
       <div className="space-y-4">
-        {/* 输入框用于模糊搜索 */}
-        <div>
-          <label>位置搜索：</label>
-          <input 
-            id="locationSearch" 
-            type="text" 
-            placeholder="请输入地点名称"
-            className="border p-1 w-full"
-          />
-        </div>
-
         {/* 输入经度和纬度 */}
         <div className="space-y-2">
           <div>
@@ -86,7 +63,7 @@ const CloudLocation = () => {
         <Button onClick={updateMapCenter}>更新地图中心</Button>
         
         {/* 地图容器，调整高度 */}
-        <div className="border p-4" style={{ height: '700px' }}>  {/* 将高度调整到 700px */}
+        <div className="border p-4" style={{ height: '900px' }}>  {/* 将高度调整到 700px */}
           <div id="mapContainer" style={{ width: '100%', height: '100%' }}></div>
         </div>
       </div>
@@ -95,5 +72,6 @@ const CloudLocation = () => {
 };
 
 export default CloudLocation;
+
 
 
