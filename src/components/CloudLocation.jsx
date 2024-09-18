@@ -13,6 +13,12 @@ const CloudLocation = () => {
         zoom: 13, // 设置缩放级别
       });
       setMap(mapInstance);
+
+      // 固定在指定位置的 marker，位置可以在这里修改
+      new AMap.Marker({
+        position: [120.5853, 30.0307], // 固定经纬度位置，修改为你需要的位置
+        map: mapInstance, // 将 marker 加载到地图上
+      });
     };
 
     // 判断高德地图的SDK是否已经加载
@@ -25,8 +31,9 @@ const CloudLocation = () => {
       script.onload = loadMap;
       document.body.appendChild(script);
     }
-  }, [longitude, latitude]); // 当经纬度改变时，重新渲染地图
+  }, []); // 仅在组件加载时执行一次
 
+  // 更新地图中心（但不影响固定的 marker 位置）
   const updateMapCenter = () => {
     if (map) {
       map.setCenter([longitude, latitude]); // 设置地图中心为用户输入的经纬度
