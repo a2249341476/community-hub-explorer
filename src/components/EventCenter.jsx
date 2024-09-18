@@ -52,6 +52,22 @@ const EventCenter = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      const { data, error } = await supabase
+        .from('event_flows')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      toast.success('流程删除成功');
+      fetchSavedFlows(); // 删除后重新加载已保存的数据
+    } catch (error) {
+      toast.error('删除失败: ' + error.message);
+    }
+  };
+
   useEffect(() => {
     fetchSavedFlows(); // 页面加载时获取已保存的数据
   }, []);
@@ -93,6 +109,8 @@ const EventCenter = () => {
                 <p><strong>事件流转范围:</strong> {flow.flow_scope}</p>
                 <p><strong>事件整体处置时限:</strong> {flow.process_time_limit}</p>
                 <p><strong>节点临期提醒时长:</strong> {flow.node_delay_time}</p>
+                {/* 添加删除按钮 */}
+                <Button onClick={() => handleDelete(flow.id)} className="mt-2" variant="destructive">删除流程</Button>
               </div>
             ))
           ) : (
@@ -105,3 +123,4 @@ const EventCenter = () => {
 };
 
 export default EventCenter;
+
