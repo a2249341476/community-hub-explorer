@@ -63,7 +63,7 @@ const CloudLocation = () => {
         <Button onClick={updateMapCenter}>更新地图中心</Button>
         
         {/* 地图容器 */}
-        <div className="border p-4" style={{ height: '500px' }}>
+        <div className="border p-4" style={{ height: '1000px' }}>
           <div id="mapContainer" style={{ width: '100%', height: '100%' }}></div>
         </div>
       </div>
