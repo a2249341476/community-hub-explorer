@@ -8,59 +8,55 @@ const CloudLocation = () => {
 
   useEffect(() => {
     const loadMap = () => {
-      if (map) {
-        map.setCenter([longitude, latitude]); // 如果地图已经存在，更新中心点
-      } else {
-        const mapInstance = new AMap.Map('mapContainer', {
-          center: [longitude, latitude], // 默认中心点为绍兴
-          zoom: 13, // 设置缩放级别
-        });
-        setMap(mapInstance);
+      const mapInstance = new AMap.Map('mapContainer', {
+        center: [longitude, latitude], // 默认中心点为绍兴
+        zoom: 13, // 设置缩放级别
+      });
+      setMap(mapInstance);
 
-        // 初始化自动完成服务
-        const autoCompleteInstance = new AMap.AutoComplete({
-          input: "searchInput", // 绑定输入框
-        });
-
-        // 绑定选择建议后的回调函数
-        autoCompleteInstance.on('select', (e) => {
-          const geocoder = new AMap.Geocoder();
-          geocoder.getLocation(e.poi.name, (status, result) => {
-            if (status === 'complete' && result.geocodes.length) {
-              const location = result.geocodes[0].location;
-              setLongitude(location.lng);
-              setLatitude(location.lat);
-              mapInstance.setCenter([location.lng, location.lat]);
-            }
-          });
-        });
-      }
+      // 引入自动提示搜索功能
+      const autoOptions = {
+        input: "locationSearch" // 搜索框的 input 元素 id
+      };
+      const autoComplete = new AMap.Autocomplete(autoOptions);
+      autoComplete.on('select', (event) => {
+        const { location } = event.poi; // 获取选中的地点的经纬度
+        if (location) {
+          setLongitude(location.lng);
+          setLatitude(location.lat);
+          mapInstance.setCenter([location.lng, location.lat]); // 更新地图中心
+        }
+      });
     };
 
-    // 检查 AMap 是否已经加载
     if (window.AMap) {
       loadMap();
     } else {
-      // 动态加载高德地图 SDK
       const script = document.createElement('script');
-      script.src = "https://webapi.amap.com/maps?v=2.0&key=4a6434ff122931e7a54dc7d1c04dfd7c";
+      script.src = "https://webapi.amap.com/maps?v=2.0&key=4a6434ff122931e7a54dc7d1c04dfd7c&plugin=AMap.Autocomplete";
       script.onload = loadMap;
       document.body.appendChild(script);
     }
-  }, [longitude, latitude, map]); // 每次经纬度或 map 实例变化时更新
+  }, [longitude, latitude]);
+
+  const updateMapCenter = () => {
+    if (map) {
+      map.setCenter([longitude, latitude]); // 设置地图中心为用户输入的经纬度
+    }
+  };
 
   return (
     <div>
       <h3 className="text-lg font-medium mb-4">云定位</h3>
       <div className="space-y-4">
-        {/* 输入模糊搜索的查询 */}
+        {/* 输入框用于模糊搜索 */}
         <div>
-          <label>搜索地点：</label>
+          <label>位置搜索：</label>
           <input 
-            id="searchInput" // 给输入框添加ID以便自动完成服务使用
-            type="text"
-            placeholder="输入地点名称..."
-            className="border p-1"
+            id="locationSearch" 
+            type="text" 
+            placeholder="请输入地点名称"
+            className="border p-1 w-full"
           />
         </div>
 
@@ -86,8 +82,11 @@ const CloudLocation = () => {
           </div>
         </div>
         
-        {/* 地图容器 */}
-        <div className="border p-4" style={{ height: '500px' }}>
+        {/* 按钮来获取当前位置 */}
+        <Button onClick={updateMapCenter}>更新地图中心</Button>
+        
+        {/* 地图容器，调整高度 */}
+        <div className="border p-4" style={{ height: '700px' }}>  {/* 将高度调整到 700px */}
           <div id="mapContainer" style={{ width: '100%', height: '100%' }}></div>
         </div>
       </div>
