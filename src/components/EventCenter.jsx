@@ -53,6 +53,23 @@ const EventCenter = () => {
     }
   };
 
+  // 添加删除功能
+  const handleDelete = async (id) => {
+    try {
+      const { data, error } = await supabase
+        .from('event_flows')
+        .delete()
+        .eq('id', id); // 匹配 id
+
+      if (error) throw error;
+
+      toast.success('流程删除成功');
+      fetchSavedFlows(); // 删除后刷新数据
+    } catch (error) {
+      toast.error('删除失败: ' + error.message);
+    }
+  };
+
   // 点击按钮显示保存的数据
   const handleShowFlows = () => {
     if (!showFlows) {
@@ -116,4 +133,5 @@ const EventCenter = () => {
 };
 
 export default EventCenter;
+
 
