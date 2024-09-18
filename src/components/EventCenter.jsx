@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from '@/lib/supabaseClient';
@@ -9,6 +9,7 @@ const EventCenter = () => {
   const [flowScope, setFlowScope] = useState('');
   const [processTimeLimit, setProcessTimeLimit] = useState('');
   const [nodeDelayTime, setNodeDelayTime] = useState('');
+  const [savedFlows, setSavedFlows] = useState([]); // 保存所有已保存的事件流程
 
   const handleSave = async () => {
     try {
@@ -31,10 +32,29 @@ const EventCenter = () => {
       setFlowScope('');
       setProcessTimeLimit('');
       setNodeDelayTime('');
+      fetchSavedFlows(); // 保存后重新加载已保存的数据
     } catch (error) {
       toast.error('保存失败: ' + error.message);
     }
   };
+
+  const fetchSavedFlows = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('event_flows')
+        .select('*');
+
+      if (error) throw error;
+
+      setSavedFlows(data); // 设置已保存的数据
+    } catch (error) {
+      toast.error('获取数据失败: ' + error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchSavedFlows(); // 页面加载时获取已保存的数据
+  }, []);
 
   return (
     <div>
@@ -60,13 +80,25 @@ const EventCenter = () => {
           value={nodeDelayTime}
           onChange={(e) => setNodeDelayTime(e.target.value)}
         />
-        <div>
-          <p className="mb-2">流程节点配置（拖拽功能待实现）</p>
-          <div className="border p-4 mb-2">节点1</div>
-          <div className="border p-4 mb-2">节点2</div>
-          <div className="border p-4 mb-2">节点3</div>
-        </div>
         <Button onClick={handleSave}>保存配置</Button>
+
+        {/* 增加显示已保存内容的部分 */}
+        <h4 className="text-lg font-medium mt-6">已保存的事件流程</h4>
+        <Button onClick={fetchSavedFlows} className="mb-4">刷新数据</Button>
+        <div className="space-y-2">
+          {savedFlows.length > 0 ? (
+            savedFlows.map((flow) => (
+              <div key={flow.id} className="border p-4">
+                <p><strong>流程名称:</strong> {flow.flow_name}</p>
+                <p><strong>事件流转范围:</strong> {flow.flow_scope}</p>
+                <p><strong>事件整体处置时限:</strong> {flow.process_time_limit}</p>
+                <p><strong>节点临期提醒时长:</strong> {flow.node_delay_time}</p>
+              </div>
+            ))
+          ) : (
+            <p>暂无已保存的事件流程。</p>
+          )}
+        </div>
       </div>
     </div>
   );
