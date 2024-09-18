@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from '@/lib/supabaseClient';
@@ -10,6 +10,7 @@ const EventCenter = () => {
   const [processTimeLimit, setProcessTimeLimit] = useState('');
   const [nodeDelayTime, setNodeDelayTime] = useState('');
   const [savedFlows, setSavedFlows] = useState([]); // 保存所有已保存的事件流程
+  const [showFlows, setShowFlows] = useState(false); // 控制是否显示已保存的流程
 
   const handleSave = async () => {
     try {
@@ -52,25 +53,13 @@ const EventCenter = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    try {
-      const { data, error } = await supabase
-        .from('event_flows')
-        .delete()
-        .eq('id', id);
-
-      if (error) throw error;
-
-      toast.success('流程删除成功');
-      fetchSavedFlows(); // 删除后重新加载已保存的数据
-    } catch (error) {
-      toast.error('删除失败: ' + error.message);
+  // 点击按钮显示保存的数据
+  const handleShowFlows = () => {
+    if (!showFlows) {
+      fetchSavedFlows(); // 加载数据
     }
+    setShowFlows(!showFlows); // 切换显示状态
   };
-
-  useEffect(() => {
-    fetchSavedFlows(); // 页面加载时获取已保存的数据
-  }, []);
 
   return (
     <div>
@@ -100,23 +89,27 @@ const EventCenter = () => {
 
         {/* 增加显示已保存内容的部分 */}
         <h4 className="text-lg font-medium mt-6">已保存的事件流程</h4>
-        <Button onClick={fetchSavedFlows} className="mb-4">刷新数据</Button>
-        <div className="space-y-2">
-          {savedFlows.length > 0 ? (
-            savedFlows.map((flow) => (
-              <div key={flow.id} className="border p-4">
-                <p><strong>流程名称:</strong> {flow.flow_name}</p>
-                <p><strong>事件流转范围:</strong> {flow.flow_scope}</p>
-                <p><strong>事件整体处置时限:</strong> {flow.process_time_limit}</p>
-                <p><strong>节点临期提醒时长:</strong> {flow.node_delay_time}</p>
-                {/* 添加删除按钮 */}
-                <Button onClick={() => handleDelete(flow.id)} className="mt-2" variant="destructive">删除流程</Button>
-              </div>
-            ))
-          ) : (
-            <p>暂无已保存的事件流程。</p>
-          )}
-        </div>
+        <Button onClick={handleShowFlows} className="mb-4">
+          {showFlows ? '隐藏已保存流程' : '显示已保存流程'}
+        </Button>
+        {showFlows && (
+          <div className="space-y-2">
+            {savedFlows.length > 0 ? (
+              savedFlows.map((flow) => (
+                <div key={flow.id} className="border p-4">
+                  <p><strong>流程名称:</strong> {flow.flow_name}</p>
+                  <p><strong>事件流转范围:</strong> {flow.flow_scope}</p>
+                  <p><strong>事件整体处置时限:</strong> {flow.process_time_limit}</p>
+                  <p><strong>节点临期提醒时长:</strong> {flow.node_delay_time}</p>
+                  {/* 添加删除按钮 */}
+                  <Button onClick={() => handleDelete(flow.id)} className="mt-2" variant="destructive">删除流程</Button>
+                </div>
+              ))
+            ) : (
+              <p>暂无已保存的事件流程。</p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
