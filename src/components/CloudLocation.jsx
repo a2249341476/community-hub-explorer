@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 const CloudLocation = () => {
   const [longitude, setLongitude] = useState(120.5802); // 默认经度：绍兴
   const [latitude, setLatitude] = useState(30.0298);    // 默认纬度：绍兴
+  const [searchQuery, setSearchQuery] = useState('');   // 搜索查询
   const [map, setMap] = useState(null);
+  const [autoComplete, setAutoComplete] = useState(null);
 
   useEffect(() => {
     const loadMap = () => {
@@ -13,6 +15,25 @@ const CloudLocation = () => {
         zoom: 13, // 设置缩放级别
       });
       setMap(mapInstance);
+
+      // 初始化自动完成服务
+      const autoCompleteInstance = new AMap.AutoComplete({
+        input: "searchInput", // 绑定输入框
+      });
+      setAutoComplete(autoCompleteInstance);
+
+      // 绑定选择建议后的回调函数
+      autoCompleteInstance.on('select', (e) => {
+        const geocoder = new AMap.Geocoder();
+        geocoder.getLocation(e.poi.name, (status, result) => {
+          if (status === 'complete' && result.geocodes.length) {
+            const location = result.geocodes[0].location;
+            setLongitude(location.lng);
+            setLatitude(location.lat);
+            mapInstance.setCenter([location.lng, location.lat]);
+          }
+        });
+      });
     };
 
     // 判断高德地图的SDK是否已经加载
@@ -25,18 +46,25 @@ const CloudLocation = () => {
       script.onload = loadMap;
       document.body.appendChild(script);
     }
-  }, [longitude, latitude]); // 当经纬度改变时，重新渲染地图
-
-  const updateMapCenter = () => {
-    if (map) {
-      map.setCenter([longitude, latitude]); // 设置地图中心为用户输入的经纬度
-    }
-  };
+  }, [longitude, latitude]);
 
   return (
     <div>
       <h3 className="text-lg font-medium mb-4">云定位</h3>
       <div className="space-y-4">
+        {/* 输入模糊搜索的查询 */}
+        <div>
+          <label>搜索地点：</label>
+          <input 
+            id="searchInput" // 给输入框添加ID以便自动完成服务使用
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="输入地点名称..."
+            className="border p-1"
+          />
+        </div>
+
         {/* 输入经度和纬度 */}
         <div className="space-y-2">
           <div>
@@ -59,11 +87,8 @@ const CloudLocation = () => {
           </div>
         </div>
         
-        {/* 按钮来获取当前位置 */}
-        <Button onClick={updateMapCenter}>更新地图中心</Button>
-        
-        {/* 地图容器 */}
-        <div className="border p-4" style={{ height: '1000px' }}>
+        {/* 地图容器，调整高度 */}
+        <div className="border p-4" style={{ height: '500px' }}>
           <div id="mapContainer" style={{ width: '100%', height: '100%' }}></div>
         </div>
       </div>
@@ -72,3 +97,4 @@ const CloudLocation = () => {
 };
 
 export default CloudLocation;
+
