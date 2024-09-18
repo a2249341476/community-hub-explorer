@@ -14,10 +14,16 @@ const CloudLocation = () => {
       });
       setMap(mapInstance);
 
-      // 固定在指定位置的 marker，位置可以在这里修改
+      // 固定在指定位置的 marker，设置为红色
       new AMap.Marker({
-        position: [120.5853, 30.0307], // 固定经纬度位置，修改为你需要的位置
+        position: [120.613613, 29.989365], // 指定的经纬度位置
         map: mapInstance, // 将 marker 加载到地图上
+        icon: new AMap.Icon({ // 设置自定义的 icon 颜色为红色
+          size: new AMap.Size(25, 34),  // 图标大小
+          image: 'https://a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-red.png', // 红色标记
+          imageSize: new AMap.Size(25, 34),  // 图片大小
+        }),
+        title: "联通分公司" // 标记的标题
       });
     };
 
@@ -70,7 +76,7 @@ const CloudLocation = () => {
         <Button onClick={updateMapCenter}>更新地图中心</Button>
         
         {/* 地图容器，调整高度 */}
-        <div className="border p-4" style={{ height: '900px' }}>  {/* 将高度调整到 700px */}
+        <div className="border p-4" style={{ height: '900px' }}>
           <div id="mapContainer" style={{ width: '100%', height: '100%' }}></div>
         </div>
       </div>
