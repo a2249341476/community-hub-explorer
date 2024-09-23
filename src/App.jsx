@@ -1,36 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { navItems } from "./nav-items";
-import EZUIKit from 'ezuikit-js';
-import CloudPartyMeeting from './components/CloudPartyMeeting'; // 从components/ui中引入CloudPartyMeeting组件
+import CloudPartyMeeting from './components/CloudPartyMeeting';
 
 const queryClient = new QueryClient();
 
-// 创建一个监控页面组件
+// 创建一个简化的监控页面组件
 const MonitoringPage = () => {
-  useEffect(() => {
-    // 初始化EZUIKit播放器实例
-    const UIKitDEMO = new EZUIKit.EZUIKitPlayer({
-      id: 'ezuikit-player',
-      url: 'ezopen://open.ys7.com/J76228367/1.hd.live', // 替换为您的视频流地址
-      accessToken: 'at.50mffmbj9szcr3o824fjgas25n41r7cw-8s3a15x98u-0pbpnp3-wqddrxwkr' // 替换为您的accessToken
-    });
-
-    // 清理函数，用于在组件卸载时销毁播放器实例
-    return () => {
-      if (UIKitDEMO) {
-        UIKitDEMO.destroy();
-      }
-    };
-  }, []);
-
   return (
     <div>
-      {/* 用于挂载播放器的div元素 */}
-      <div id="ezuikit-player" style={{ width: '600px', height: '400px' }}></div>
+      <h2>监控页面</h2>
+      <p>这里是监控页面的内容。由于无法使用 EZUIKit，我们暂时显示一个占位符。</p>
     </div>
   );
 };
@@ -44,8 +27,8 @@ const App = () => (
           {navItems.map(({ to, page }) => (
             <Route key={to} path={to} element={page} />
           ))}
-          <Route path="/cloud-party-meeting" element={<CloudPartyMeeting />} /> {/* 新增云党会页面路由 */}
-          <Route path="/monitoring" element={<MonitoringPage />} /> {/* 新增监控页面路由 */}
+          <Route path="/cloud-party-meeting" element={<CloudPartyMeeting />} />
+          <Route path="/monitoring" element={<MonitoringPage />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
