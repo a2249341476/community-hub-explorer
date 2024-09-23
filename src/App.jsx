@@ -10,15 +10,18 @@ const queryClient = new QueryClient();
 
 const MonitoringPage = () => {
   const [playerInstance, setPlayerInstance] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const initializePlayer = async () => {
       if (typeof window.EZUIKit === 'undefined') {
         console.error('EZUIKit is not loaded');
+        setError('EZUIKit is not loaded');
         return;
       }
 
       try {
+        console.log('Initializing EZUIKit player...');
         const accessToken = 'at.50mffmbj9szcr3o824fjgas25n41r7cw-8s3a15x98u-0pbpnp3-wqddrxwkr';
         const url = 'ezopen://open.ys7.com/J76228367/1.hd.live';
 
@@ -26,16 +29,15 @@ const MonitoringPage = () => {
           id: 'ezuikit-player',
           url: url,
           accessToken: accessToken,
-          width: 1200,
-          height: 800,
+          width: 600,
+          height: 400,
         });
 
         setPlayerInstance(player);
-
-        // 添加日志以便调试
         console.log('Player initialized:', player);
       } catch (error) {
         console.error('Error initializing player:', error);
+        setError(`Error initializing player: ${error.message}`);
       }
     };
 
@@ -43,6 +45,7 @@ const MonitoringPage = () => {
 
     return () => {
       if (playerInstance) {
+        console.log('Destroying player instance');
         playerInstance.destroy();
       }
     };
@@ -51,6 +54,7 @@ const MonitoringPage = () => {
   return (
     <div>
       <h2>监控页面</h2>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <div id="ezuikit-player" style={{ width: '600px', height: '400px' }}></div>
     </div>
   );
