@@ -7,40 +7,13 @@
     <meta name="description" content="GPT Engineer Generated Project" />
     <meta name="author" content="GPT Engineer" />
     <meta property="og:image" content="/og-image.svg" />
-
+    
     <!-- 引入高德地图 JavaScript SDK -->
     <script src="https://webapi.amap.com/maps?v=2.0&key=4a6434ff122931e7a54dc7d1c04dfd7c"></script>
-
-    <!-- 引入 ezuikit.js -->
-    <script src="path/to/ezuikit.js"></script>
   </head>
   <body>
-    <!-- 主容器 -->
     <div id="root"></div>
-    
-    <!-- 萤石云播放器容器 -->
-    <div id="ezuikit-player" style="width: 640px; height: 360px;"></div>
-
-    <!-- 自定义脚本 -->
     <script src="/.gpt_engineer/index.js" type="module"></script>
     <script type="module" src="/src/main.jsx"></script>
-    
-    <!-- 初始化萤石云播放器 -->
-    <script>
-      const player = new EZUIKit.EZUIKitPlayer({
-        id: 'ezuikit-player',
-        url: '你的播放地址', // 替换为实际的 ezopen 播放地址
-        accessToken: '你的AccessToken', // 替换为实际的 AccessToken
-        width: 640,
-        height: 360,
-        handleError: function (error) {
-          console.error('播放失败:', error);
-        },
-        handleSuccess: function () {
-          console.log('播放成功');
-        }
-      });
-    </script>
   </body>
 </html>
-
