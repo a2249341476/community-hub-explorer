@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { navItems } from "./nav-items";
 import CloudPartyMeeting from './components/CloudPartyMeeting';
-import EZUIKit from './lib/ezuikit'; // 引入 ezuikit.js 文件
+import * as EZUIKit from './lib/ezuikit'; // Changed to import all exports
 
 const queryClient = new QueryClient();
 
