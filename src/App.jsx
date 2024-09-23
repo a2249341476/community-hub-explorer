@@ -26,8 +26,8 @@ const MonitoringPage = () => {
           id: 'ezuikit-player',
           url: url,
           accessToken: accessToken,
-          width: 600,
-          height: 400,
+          width: 1200,
+          height: 800,
         });
 
         setPlayerInstance(player);
