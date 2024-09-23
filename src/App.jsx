@@ -5,28 +5,34 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { navItems } from "./nav-items";
 import CloudPartyMeeting from './components/CloudPartyMeeting';
-import * as EZUIKit from './lib/ezuikit'; // Changed to import all exports
+// 不再需要导入 ezuikit.js
+// import * as EZUIKit from './lib/ezuikit'; // 移除这个导入
 
 const queryClient = new QueryClient();
 
 // 创建监控页面组件，并使用 EZUIKit 播放器
 const MonitoringPage = () => {
   useEffect(() => {
-    // 初始化 EZUIKit 播放器实例
-    const UIKitDEMO = new EZUIKit.EZUIKitPlayer({
-      id: 'ezuikit-player', // 对应 HTML 中播放器的 div ID
-      url: 'ezopen://open.ys7.com/J76228367/1.hd.live', // 替换为您的视频流地址
-      accessToken: 'at.50mffmbj9szcr3o824fjgas25n41r7cw-8s3a15x98u-0pbpnp3-wqddrxwkr', // 替换为您的 accessToken
-      width: 600, // 可选：设置播放器宽度
-      height: 400, // 可选：设置播放器高度
-    });
+    // 确保 EZUIKit 已加载在全局 window 对象上
+    if (window.EZUIKit) {
+      // 初始化 EZUIKit 播放器实例
+      const UIKitDEMO = new window.EZUIKit.EZUIKitPlayer({
+        id: 'ezuikit-player', // 对应 HTML 中播放器的 div ID
+        url: 'ezopen://open.ys7.com/J76228367/1.hd.live', // 替换为您的视频流地址
+        accessToken: 'at.50mffmbj9szcr3o824fjgas25n41r7cw-8s3a15x98u-0pbpnp3-wqddrxwkr', // 替换为您的 accessToken
+        width: 600, // 可选：设置播放器宽度
+        height: 400, // 可选：设置播放器高度
+      });
 
-    // 清理函数，用于在组件卸载时销毁播放器实例
-    return () => {
-      if (UIKitDEMO) {
-        UIKitDEMO.destroy();
-      }
-    };
+      // 清理函数，用于在组件卸载时销毁播放器实例
+      return () => {
+        if (UIKitDEMO) {
+          UIKitDEMO.destroy();
+        }
+      };
+    } else {
+      console.error('EZUIKit is not loaded');
+    }
   }, []);
 
   return (
