@@ -22,16 +22,17 @@ const MonitoringPage = () => {
         const accessToken = 'at.50mffmbj9szcr3o824fjgas25n41r7cw-8s3a15x98u-0pbpnp3-wqddrxwkr';
         const url = 'ezopen://open.ys7.com/J76228367/1.hd.live';
 
-        // 使用 EZUIKit.default 初始化播放器
-        const player = new window.EZUIKit.default({
+        const player = new window.EZUIKit.EZUIKitPlayer({
           id: 'ezuikit-player',
           url: url,
           accessToken: accessToken,
-          width: 600,
-          height: 400,
+          width: 1200,
+          height: 800,
         });
 
         setPlayerInstance(player);
+
+        // 添加日志以便调试
         console.log('Player initialized:', player);
       } catch (error) {
         console.error('Error initializing player:', error);
