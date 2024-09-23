@@ -15,8 +15,8 @@ const MonitoringPage = () => {
     // 初始化EZUIKit播放器实例
     const UIKitDEMO = new EZUIKit.EZUIKitPlayer({
       id: 'ezuikit-player',
-      url: 'ezopen://YOUR_STREAM_URL', // 替换为您的视频流地址
-      accessToken: 'YOUR_ACCESS_TOKEN' // 替换为您的accessToken
+      url: 'ezopen://open.ys7.com/J76228367/1.hd.live', // 替换为您的视频流地址
+      accessToken: 'at.50mffmbj9szcr3o824fjgas25n41r7cw-8s3a15x98u-0pbpnp3-wqddrxwkr' // 替换为您的accessToken
     });
 
     // 清理函数，用于在组件卸载时销毁播放器实例
