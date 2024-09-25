@@ -31,7 +31,7 @@
 
     <!-- 初始化视频流播放 -->
     <script>
-      var rtsp = 'rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4';
+      var rtsp = 'rtsp://101.69.216.133:8604/EUrl/PKGWPGA?params=eyJwcm90b2NvbCI6InJ0c3AiLCJleHBhbmQiOiJzdHJlYW1mb3JtPXJ0cCIsInVzZXJJZCI6IuWMluWtpuWTgeivleWJguS7k+W6kzQiLCJ0IjoxLCJhIjoiZWQ2MDViYTQ3N2VmNDI2NmFhYjgxNTM4ZTA3MTVjMzl8MXwwfDF8b3Blbl9hcGkifQ==';
       window.onload = () => {
         // 将RTSP视频流地址进行btoa编码处理
         new JSMpeg.Player("ws://localhost:9999/rtsp?url=" + btoa(rtsp), {
@@ -41,3 +41,4 @@
     </script>
   </body>
 </html>
+
