@@ -9,7 +9,7 @@
     <meta property="og:image" content="/og-image.svg" />
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
-    
+
     <!-- 引入高德地图 JavaScript SDK -->
     <script src="https://webapi.amap.com/maps?v=2.0&key=4a6434ff122931e7a54dc7d1c04dfd7c"></script>
     
@@ -20,23 +20,11 @@
     <script src="https://jsmpeg.com/jsmpeg.min.js" charset="utf-8"></script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"></div> <!-- React应用的挂载点 -->
 
-    <!-- 增加用于视频播放的 canvas 容器 -->
-    <canvas id="canvas-1" style="width: 600px;"></canvas>
-
-    <!-- 引入 React 应用的入口文件 -->
+    <!-- 你也可以在这个文件中加载一些全局需要的脚本 -->
+    <script src="/.gpt_engineer/index.js" type="module"></script>
     <script type="module" src="/src/main.jsx"></script>
-
-    <!-- 初始化视频流播放 -->
-    <script>
-      var rtsp = 'rtsp://101.69.216.133:8604/EUrl/PKGWPGA?params=eyJwcm90b2NvbCI6InJ0c3AiLCJleHBhbmQiOiJzdHJlYW1mb3JtPXJ0cCIsInVzZXJJZCI6IuWMluWtpuWTgeivleWJguS7k+W6kzQiLCJ0IjoxLCJhIjoiZWQ2MDViYTQ3N2VmNDI2NmFhYjgxNTM4ZTA3MTVjMzl8MXwwfDF8b3Blbl9hcGkifQ==';
-      window.onload = () => {
-        // 将RTSP视频流地址进行btoa编码处理
-        new JSMpeg.Player("ws://localhost:9999/rtsp?url=" + btoa(rtsp), {
-          canvas: document.getElementById("canvas-1")
-        });
-      }
-    </script>
   </body>
 </html>
+
