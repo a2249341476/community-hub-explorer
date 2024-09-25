@@ -14,7 +14,7 @@ const EzvizMonitoringPage = () => {
       }
 
       try {
-        const accessToken = 'your_ezviz_access_token';
+        const accessToken = 'at.50mffmbj9szcr3o824fjgas25n41r7cw-8s3a15x98u-0pbpnp3-wqddrxwkr';
         const url = 'ezopen://open.ys7.com/J76228367/1.hd.live';
 
         const player = new window.EZUIKit.EZUIKitPlayer({
